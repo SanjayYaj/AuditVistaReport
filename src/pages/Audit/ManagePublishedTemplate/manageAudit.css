@@ -1,0 +1,169 @@
+.datelabel {
+    margin: 10px 0px;
+    color: #47A4FF;
+  }
+  
+  .blueHeading {
+    color: #47A4FF;
+    font-weight: 600;
+  }
+  
+  .border {
+    border: 0.7px solid #D2D2D2;
+    margin-top: 5px;
+  }
+  
+  .headDiv1 {
+    margin-left: 40px;
+    flex: 1;
+  }
+  
+  .containerDiv {
+    margin: 10px 30px;
+  }
+  
+  .head1 {
+    color: #47A4FF;
+    font-weight: 600;
+    margin: 15px 0px;
+    font-size: 18px;
+  }
+  
+  .head2 {
+    font-weight: 600;
+    margin: 5px 0px;
+  }
+  
+  .text1 {
+    margin: 10px 0px;
+  }
+  
+  .btnsDiv {
+    display: flex;
+    margin: 5px 0px;
+  
+  }
+  
+  .publishbtn {
+    margin: 0 5px;
+  }
+  
+  .marbtm {
+    margin-bottom: 35px;
+  }
+  
+  .txth1 {
+    color: #47A4FF;
+    font-weight: 600;
+    margin: 10px 0px;
+    font-size: 15px;
+  }
+  
+  .pdl30 {
+    padding-left: 30px;
+  }
+  
+  .pad10 {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .borderRight {
+    /* height: 69vh; */
+    border-right: 2px solid #eff2f7;
+    padding: 0px 10px;
+  }
+  
+  .pad5 {
+    padding: 5px;
+  }
+  
+  .score {
+    margin: 0px 20px;
+    color: #47A4FF;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  
+  .marHor {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0px 0px;
+  }
+  
+  .blueDiv {
+    background: #d7e2ff;
+    padding: 20px;
+    margin: 10px 0;
+    border: 1px solid #52c41a;
+  }
+  
+  .whiteDiv {
+    background: white;
+    color: #3f99e6;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 5px 10px;
+  }
+  
+  .btnDiv {
+    margin: 10px 0;
+  }
+  
+  .labelMargin {
+    margin: 5px 10px;
+  }
+  
+  .menuClass {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #3f99e6;
+    margin: 10px 0px;
+    padding: 5px;
+  }
+  
+  .description {
+    resize: none;
+    /* border-color: #47a4ff; */
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    width: 100%;
+  }
+  
+  .dropzone {
+    min-height: 66px;
+    border: 2px dashed #ced4da;
+    background: #fff;
+    border-radius: 6px;
+  }
+  
+  .select2-selection {
+    height: 25px;
+  }
+  
+  .bgtemplate {
+    background: blue;
+  }
+  
+  .textInputSize {
+    width: 140px !important;
+    margin-left: 15px;
+  }
+  
+  .ml20px {
+    margin-left: 20px;
+  }
+  
+  .udb input {
+    margin-top: 7px;
+  }
+  
+  .flexsb {
+    display: flex;
+    justify-content: space-between;
+  }
+  .react-drawer-drawer {
+    overflow: auto !important;
+  }
+  

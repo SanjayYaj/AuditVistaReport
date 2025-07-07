@@ -1,0 +1,89 @@
+.login-page {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-image: url('../../../assets/images/bg-auth-overlay.png'); */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-image: url('../../../assets/images/bg-auth-overlay.png'); */
+  /* Add the same image */
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px);
+  z-index: 1;
+  /* Keeps it behind the login form */
+}
+
+/* Ensures the form stays sharp and above the blurred background */
+.login-form-container {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+}
+
+
+.logo {
+  height: 40px;
+}
+
+input::placeholder {
+  font-style: italic;
+  color: #ccc;
+}
+
+
+
+
+
+
+
+
+
+
+/* .login-page {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa; 
+    overflow: hidden;
+  }
+ 
+  .login-form-container {
+    position: relative;
+    z-index: 2; 
+    background: rgba(255, 255, 255, 0.9); 
+    border-radius: 10px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); 
+    width: 100%;
+    max-width: 400px;
+    padding: 30px; 
+  }
+  
+  .logo {
+    height: 40px;
+  }
+  
+  input::placeholder {
+    font-style: italic;
+    color: #ccc;
+  }
+   */

@@ -1,0 +1,679 @@
+.rst__rowWrapper {
+    padding: 10px 10px 10px 0 !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .rst__rtl.rst__rowWrapper {
+    padding: 10px 0 10px 10px !important;
+  }
+  
+  .rst__row {
+    height: 100% !important;
+    white-space: nowrap !important;
+    display: flex !important;
+  }
+  .rst__row > * {
+    box-sizing: border-box !important;
+  }
+  
+  /**
+   * The outline of where the element will go if dropped, displayed while dragging
+   */
+  .rst__rowLandingPad,
+  .rst__rowCancelPad {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  .rst__rowLandingPad > *,
+  .rst__rowCancelPad > * {
+    opacity: 0 !important;
+  }
+  .rst__rowLandingPad::before,
+  .rst__rowCancelPad::before {
+    background-color: lightblue !important;
+    border: 3px dashed white !important;
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: -1 !important;
+  }
+  
+  /**
+   * Alternate appearance of the landing pad when the dragged location is invalid
+   */
+  .rst__rowCancelPad::before {
+    background-color: #e6a8ad !important;
+  }
+  
+  /**
+   * Nodes matching the search conditions are highlighted
+   */
+  .rst__rowSearchMatch {
+    outline: solid 3px #0080ff !important;
+  }
+  
+  /**
+   * The node that matches the search conditions and is currently focused
+   */
+  .rst__rowSearchFocus {
+    outline: solid 3px #fc6421 !important;
+  }
+  
+  .rst__rowContents,
+  .rst__rowLabel,
+  .rst__rowToolbar,
+  .rst__moveHandle,
+  .rst__toolbarButton {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+  
+  .rst__rowContents {
+    position: relative !important;
+    height: 100% !important;
+    border: 0px solid #556EE6 !important;
+    border-left: 5px solid #556EE6 !important;
+    background-color: #f2f4fa !important;
+    box-shadow: none !important; 
+    padding: 0 5px 0 10px !important;
+    border-radius: 10px !important; 
+    min-width: 230px !important;
+    flex: 1 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    background-color: white !important;
+    margin-left: 3px !important;
+  }
+  
+  .rst__rtl.rst__rowContents {
+    border-right: none !important;
+    border-left: solid #bbb 1px !important;
+    padding: 0 10px 0 5px !important;
+  }
+  
+  .rst__rowContentsDragDisabled {
+    border-left: solid #bbb 1px !important;
+  }
+  
+  .rst__rtl.rst__rowContentsDragDisabled {
+    border-right: solid #bbb 1px !important;
+    border-left: solid #bbb 1px !important;
+  }
+  
+  .rst__rowLabel {
+    flex: 0 1 auto !important;
+    padding-right: 20px !important;
+  }
+  .rst__rtl.rst__rowLabel {
+    padding-left: 20px !important;
+    padding-right: inherit !important;
+  }
+  
+  .rst__rowToolbar {
+    flex: 0 1 auto !important;
+    display: flex !important;
+  }
+  
+  .rst__moveHandle,
+  .rst__loadingHandle {
+    height: 100% !important;
+    width: 37px !important;
+    background: #556EE6 
+      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MiIgaGVpZ2h0PSI0MiI+PGcgc3Ryb2tlPSIjRkZGIiBzdHJva2Utd2lkdGg9IjIuOSIgPjxwYXRoIGQ9Ik0xNCAxNS43aDE0LjQiLz48cGF0aCBkPSJNMTQgMjEuNGgxNC40Ii8+PHBhdGggZD0iTTE0IDI3LjFoMTQuNCIvPjwvZz4KPC9zdmc+')
+      no-repeat center !important;
+    border: 0 !important;
+    box-shadow: 0 2px 2px -2px;
+    cursor: move !important;
+    border-radius: 10px !important; 
+    z-index: 1 !important;
+    
+  }
+
+
+  .rst__loadingHandle {
+    cursor: default !important;
+    background: #556EE6 !important;
+    content:":::" !important;
+  }
+  
+  @keyframes pointFade {
+    0%,
+    19.999%,
+    100% {
+      opacity: 0 !important;
+    }
+    20% {
+      opacity: 1 !important;
+    }
+  }
+  
+  .rst__loadingCircle {
+    width: 80% !important; 
+    height: 80% !important;
+    margin: 10% !important;
+    position: relative !important;
+  }
+  
+  .rst__loadingCirclePoint {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+  }
+  
+  .rst__rtl.rst__loadingCirclePoint {
+    right: 0 !important;
+    left: initial !important;
+  }
+  
+  .rst__loadingCirclePoint::before {
+    content: '';
+    display: block !important;
+    margin: 0 auto !important;
+    width: 11% !important;
+    height: 30% !important;
+    background-color: #fff !important;
+    border-radius: 30% !important;
+    animation: pointFade 800ms infinite ease-in-out both !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(1) {
+    transform: rotate(0deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(7) {
+    transform: rotate(180deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(1)::before,
+  .rst__loadingCirclePoint:nth-of-type(7)::before {
+    animation-delay: -800ms !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(2) {
+    transform: rotate(30deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(8) {
+    transform: rotate(210deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(2)::before,
+  .rst__loadingCirclePoint:nth-of-type(8)::before {
+    animation-delay: -666ms !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(3) {
+    transform: rotate(60deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(9) {
+    transform: rotate(240deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(3)::before,
+  .rst__loadingCirclePoint:nth-of-type(9)::before {
+    animation-delay: -533ms !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(4) {
+    transform: rotate(90deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(10) {
+    transform: rotate(270deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(4)::before,
+  .rst__loadingCirclePoint:nth-of-type(10)::before {
+    animation-delay: -400ms !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(5) {
+    transform: rotate(120deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(11) {
+    transform: rotate(300deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(5)::before,
+  .rst__loadingCirclePoint:nth-of-type(11)::before {
+    animation-delay: -266ms !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(6) {
+    transform: rotate(150deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(12) {
+    transform: rotate(330deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(6)::before,
+  .rst__loadingCirclePoint:nth-of-type(12)::before {
+    animation-delay: -133ms !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(7) {
+    transform: rotate(180deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(13) {
+    transform: rotate(360deg) !important;
+  }
+  .rst__loadingCirclePoint:nth-of-type(7)::before,
+  .rst__loadingCirclePoint:nth-of-type(13)::before {
+    animation-delay: 0ms !important;
+  }
+  
+  .rst__rowTitle {
+    font-weight: bold !important;
+  }
+  
+  .rst__rowTitleWithSubtitle {
+    font-size: 85% !important;
+    display: block !important;
+    height: 0.8rem !important;
+  }
+  
+  .rst__rowSubtitle {
+    font-size: 70% !important;
+    line-height: 1 !important;
+  }
+  
+  .rst__collapseButton,
+  .rst__expandButton {
+    appearance: none !important;
+    border: none !important;
+    position: absolute !important;
+    border-radius: 100% !important;
+    box-shadow: 0 0 0 1px #000 !important;
+    width: 16px !important;
+    height: 16px !important;
+    padding: 0 !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    cursor: pointer !important;
+  }
+  .rst__rtl.rst__collapseButton,
+  .rst__rtl.rst__expandButton {
+    transform: translate(50%, -50%) !important;
+  }
+  .rst__collapseButton:focus,
+  .rst__expandButton:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 1px #000, 0 0 1px 3px #83bef9 !important;
+  }
+  .rst__collapseButton:hover:not(:active),
+  .rst__expandButton:hover:not(:active) {
+    background-size: 24px !important;
+    height: 20px !important;
+    width: 20px !important;
+  }
+  
+  .rst__collapseButton { 
+    background: #fff
+      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCI+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjgiIGZpbGw9IiNGRkYiLz48ZyBzdHJva2U9IiM5ODk4OTgiIHN0cm9rZS13aWR0aD0iMS45IiA+PHBhdGggZD0iTTQuNSA5aDkiLz48L2c+Cjwvc3ZnPg==')
+      no-repeat center !important;
+  }
+  
+  .rst__expandButton {
+    background: #fff
+      url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCI+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjgiIGZpbGw9IiNGRkYiLz48ZyBzdHJva2U9IiM5ODk4OTgiIHN0cm9rZS13aWR0aD0iMS45IiA+PHBhdGggZD0iTTQuNSA5aDkiLz48cGF0aCBkPSJNOSA0LjV2OSIvPjwvZz4KPC9zdmc+')
+      no-repeat center !important ;
+  }
+  
+  /**
+   * Line for under a node with children
+   */
+  .rst__lineChildren {
+    height: 100% !important;
+    display: inline-block !important;
+    position: absolute !important;
+  }
+  .rst__lineChildren::after {
+    content: '' !important;
+    position: absolute !important;
+    background-color: #0057ff !important;
+    width: 1px !important;
+    left: 50% !important;
+    bottom: 0 !important;
+    height: 10px !important;
+  }
+  
+  .rst__rtl.rst__lineChildren::after {
+    right: 50% !important;
+    left: initial !important;
+  }
+  
+  .rst__placeholder {
+    position: relative !important;
+    height: 68px !important;
+    max-width: 300px !important;
+    padding: 10px !important;
+  }
+  .rst__placeholder,
+  .rst__placeholder > * {
+    box-sizing: border-box !important;
+  }
+  .rst__placeholder::before {
+    border: 3px dashed #d9d9d9 !important;
+    content: '' !important;
+    position: absolute !important;
+    top: 5px !important;
+    right: 5px !important;
+    bottom: 5px !important;
+    left: 5px !important;
+    z-index: -1 !important;
+  }
+  
+  /**
+   * The outline of where the element will go if dropped, displayed while dragging
+   */
+  .rst__placeholderLandingPad,
+  .rst__placeholderCancelPad {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  .rst__placeholderLandingPad *,
+  .rst__placeholderCancelPad * {
+    opacity: 0 !important;
+  }
+  .rst__placeholderLandingPad::before,
+  .rst__placeholderCancelPad::before {
+    background-color: lightblue !important;
+    border-color: white !important;
+  }
+  
+  /**
+   * Alternate appearance of the landing pad when the dragged location is invalid
+   */
+  .rst__placeholderCancelPad::before {
+    background-color: #e6a8ad !important;
+  }
+  
+  /**
+   * Extra class applied to VirtualScroll through className prop
+   */
+  .rst__virtualScrollOverride {
+    overflow: auto !important;
+    border:0 !important;
+
+  }
+  .rst__virtualScrollOverride * {
+    box-sizing: border-box !important;
+    /* border-radius: 10px !important; */
+  }
+  
+  .ReactVirtualized__Grid__innerScrollContainer {
+    overflow: visible !important;
+  }
+  
+  .rst__rtl .ReactVirtualized__Grid__innerScrollContainer {
+    direction: rtl !important;
+  }
+  
+  .ReactVirtualized__Grid {
+    outline: none !important;
+  }
+  
+  .rst__node {
+    min-width: 100% !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    text-align: left !important;
+    height: 62px !important;
+  }
+  
+  .rst__node.rst__rtl {
+    text-align: right !important;
+  }
+  
+  .rst__nodeContent {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+  }
+  
+  /* ==========================================================================
+     Scaffold
+  
+      Line-overlaid blocks used for showing the tree structure
+     ========================================================================== */
+  .rst__lineBlock,
+  .rst__absoluteLineBlock {
+    height: 100% !important;
+    position: relative !important;
+    display: inline-block !important;
+  }
+  
+  .rst__absoluteLineBlock {
+    position: absolute !important;
+    top: 0 !important;
+  }
+  
+  .rst__lineHalfHorizontalRight::before,
+  .rst__lineFullVertical::after,
+  .rst__lineHalfVerticalTop::after,
+  .rst__lineHalfVerticalBottom::after {
+    position: absolute !important;
+    content: '' !important;
+    background-color: #0057ff !important;
+  }
+  
+  /**
+   * +-----+
+   * |     |
+   * |  +--+
+   * |     |
+   * +-----+
+   */
+  .rst__lineHalfHorizontalRight::before {
+    height: 1px !important;
+    top: 50% !important;
+    right: 0 !important;
+    width: 50% !important;
+  }
+  
+  .rst__rtl.rst__lineHalfHorizontalRight::before {
+    left: 0 !important;
+    right: initial !important;
+  }
+  
+  /**
+   * +--+--+
+   * |  |  |
+   * |  |  |
+   * |  |  |
+   * +--+--+
+   */
+  .rst__lineFullVertical::after,
+  .rst__lineHalfVerticalTop::after,
+  .rst__lineHalfVerticalBottom::after {
+    width: 1px !important;
+    left: 50% !important;
+    top: 0 !important;
+    height: 100% !important;
+  }
+  
+  /**
+   * +--+--+
+   * |  |  |
+   * |  |  |
+   * |  |  |
+   * +--+--+
+   */
+  .rst__rtl.rst__lineFullVertical::after,
+  .rst__rtl.rst__lineHalfVerticalTop::after,
+  .rst__rtl.rst__lineHalfVerticalBottom::after {
+    right: 50% !important;
+    left: initial !important;
+  }
+  
+  /**
+   * +-----+
+   * |  |  |
+   * |  +  |
+   * |     |
+   * +-----+
+   */
+  .rst__lineHalfVerticalTop::after {
+    height: 50% !important;
+  }
+  
+  /**
+   * +-----+
+   * |     |
+   * |  +  |
+   * |  |  |
+   * +-----+
+   */
+  .rst__lineHalfVerticalBottom::after {
+    top: auto !important;
+    bottom: 0 !important;
+    height: 50% !important;
+  }
+  
+  /* Highlight line for pointing to dragged row destination
+     ========================================================================== */
+  /**
+   * +--+--+
+   * |  |  |
+   * |  |  |
+   * |  |  |
+   * +--+--+
+   */
+  .rst__highlightLineVertical {
+    z-index: 3 !important;
+  }
+  .rst__highlightLineVertical::before {
+    position: absolute !important;
+    content: '' !important;
+    background-color: #36c2f6 !important;
+    width: 8px !important;
+    margin-left: -4px !important;
+    left: 50% !important;
+    top: 0 !important;
+    height: 100% !important;
+  }
+  
+  .rst__rtl.rst__highlightLineVertical::before {
+    margin-left: initial !important;
+    margin-right: -4px !important;
+    left: initial !important;
+    right: 50% !important;
+  }
+  
+  @keyframes arrow-pulse {
+    0% {
+      transform: translate(0, 0) !important;
+      opacity: 0 !important;
+    }
+    30% {
+      transform: translate(0, 300%) !important;
+      opacity: 1 !important;
+    }
+    70% {
+      transform: translate(0, 700%) !important;
+      opacity: 1 !important;
+    }
+    100% {
+      transform: translate(0, 1000%) !important;
+      opacity: 0 !important;
+    }
+  }
+  .rst__highlightLineVertical::after {
+    content: '' !important;
+    position: absolute !important;
+    height: 0 !important;
+    margin-left: -4px !important;
+    left: 50% !important;
+    top: 0 !important;
+    border-left: 4px solid transparent !important;
+    border-right: 4px solid transparent !important;
+    border-top: 4px solid white !important;
+    animation: arrow-pulse 1s infinite linear both !important;
+  }
+  
+  .rst__rtl.rst__highlightLineVertical::after {
+    margin-left: initial !important;
+    margin-right: -4px !important;
+    right: 50% !important;
+    left: initial !important;
+  }
+  
+  /**
+   * +-----+
+   * |     |
+   * |  +--+
+   * |  |  |
+   * +--+--+
+   */
+  .rst__highlightTopLeftCorner::before {
+    z-index: 3 !important;
+    content: '' !important;
+    position: absolute !important;
+    border-top: solid 8px #36c2f6 !important;
+    border-left: solid 8px #36c2f6 !important;
+    box-sizing: border-box !important;
+    height: calc(50% + 4px) !important;
+    top: 50% !important;
+    margin-top: -4px !important;
+    right: 0 !important;
+    width: calc(50% + 4px) !important;
+  }
+  
+  .rst__rtl.rst__highlightTopLeftCorner::before {
+    border-right: solid 8px #36c2f6 !important;
+    border-left: none !important;
+    left: 0 !important;
+    right: initial !important;
+  }
+  
+  /**
+   * +--+--+
+   * |  |  |
+   * |  |  |
+   * |  +->|
+   * +-----+
+   */
+  .rst__highlightBottomLeftCorner {
+    z-index: 3 !important;
+  }
+  .rst__highlightBottomLeftCorner::before {
+    content: '';
+    position: absolute !important;
+    border-bottom: solid 8px #36c2f6 !important;
+    border-left: solid 8px #36c2f6 !important;
+    box-sizing: border-box !important;
+    height: calc(100% + 4px) !important;
+    top: 0 !important;
+    right: 12px !important;
+    width: calc(50% - 8px) !important;
+  }
+  
+  .rst__rtl.rst__highlightBottomLeftCorner::before {
+    border-right: solid 8px #36c2f6 !important;
+    border-left: none !important;
+    left: 12px !important;
+    right: initial !important;
+  }
+  
+  .rst__highlightBottomLeftCorner::after {
+    content: '' !important;
+    position: absolute !important;
+    height: 0 !important;
+    right: 0 !important;
+    top: 100% !important;
+    margin-top: -12px !important;
+    border-top: 12px solid transparent !important;
+    border-bottom: 12px solid transparent !important;
+    border-left: 12px solid #36c2f6 !important;
+  }
+  
+  .rst__rtl.rst__highlightBottomLeftCorner::after {
+    left: 0 !important;
+    right: initial !important;
+    border-right: 12px solid #36c2f6 !important;
+    border-left: none !important;
+  }
+
+  /* Hide drag handle when dragging is disabled */
+.node-not-draggable .rst__moveHandle {
+  display: none !important;
+}
+
+/* Optionally: make sure it's visible when enabled */
+.node-draggable .rst__moveHandle {
+  display: block !important;
+}
+  
