@@ -87,7 +87,8 @@ const D3AreaChart = (props) => {
 
     const reportSlice = useSelector(state => state.reportSliceReducer)
     const ProcessedID = reportSlice.processingData[props.id]
-
+    var queryFilter = reportSlice.queryFilter
+console.log(' reportSlice.queryFilter :>> ',  reportSlice.queryFilter);
 
     const selectedsortredux = useSelector(state => state.reportSliceReducer.selectedsortredux);
     const selectedvalueRedux= useSelector(state => state.reportSliceReducer.selectedValues);
@@ -99,6 +100,13 @@ const D3AreaChart = (props) => {
         setchartData(dataRetreived.data?.[0][calc])
     }, [calc])
 
+    useEffect(() => {
+        console.log('queryFilter from Area', queryFilter)
+        setProcessing(true)
+        setChartsLoad(false)
+        dispatch(toggleProcessingState(dataRetreived.i))
+        LoadedData(dataRetreived.x_axis_key.name, '1')
+    }, [queryFilter])
 
     useEffect(() => {
 
@@ -145,7 +153,7 @@ const D3AreaChart = (props) => {
             show_table_fn(false)
         }
 
-    }, [props, containerWidth, dataRetreived])
+    }, [props, containerWidth, dataRetreived , queryFilter])
 
 
 
@@ -187,6 +195,32 @@ const D3AreaChart = (props) => {
             const addon =await buildAdditionalFields( dataRetreived.yAxis_arr, dataRetreived.yAxis_Selectd_Cln, dataRetreived.CalculationArr);
             console.log('addon :>> ', addon);
 
+
+            const filters = [];
+            if( queryFilter ){
+              console.log("queryFilter")
+             
+      
+              const collectionName = "cln_adt_pbd_endpoints";
+              
+              for (const field in queryFilter) {
+                const checkedValues = queryFilter[field]
+                  .filter(item => item.is_checked)
+                  .map(item => item.value);
+              
+                if (checkedValues.length > 0) {
+                  filters.push({
+                    field,
+                    value: checkedValues,
+                    collection: collectionName
+                  });
+                }
+              }
+              
+              console.log("???filters????", filters);
+          }
+        
+
             if (dataRetreived.selected_cln_name !== undefined) {
                 const data = {
                     collection_name: dataRetreived.selected_cln_name.cln_name,
@@ -221,8 +255,14 @@ const D3AreaChart = (props) => {
                     // want to send the level key field for choosing the level values
                     level: dataRetreived.groupingValue,
                     chartType:'1',
-                    relationshipdata: reportSlice.pageNodeInfo.relationships,
+                    relationshipdata: reportSlice.pageNodeInfo?.relationships,
                     collections: reportSlice.pageNodeInfo.selected_cln_name ,
+                    chartName: dataRetreived.name,
+
+
+                   
+                    filters
+            
                 }
 
 

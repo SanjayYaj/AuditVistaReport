@@ -2000,6 +2000,10 @@ console.log('props :>> ', props);
     console.log('selectedOption for legend :>> ', selectedOption);
     setSelectedCategoryLegend(selectedOption);
     updating_layObj.legend_category = selectedOption;
+    // updating_layObj.chnaged = true;
+    // updating_layObj.changed = true;
+    dispatch(toggleProcessingState(updating_layObj.i))
+
     clone_lay[Number(JSON.parse(sessionStorage.getItem("blockIdx")))] = updating_layObj;
     dispatch(updateLayoutInfo(clone_lay));
     dispatch(updateLayoutData(clone_lay, db_data));
@@ -2094,13 +2098,16 @@ console.log('props :>> ', props);
     var result = await dispatch(retriveClnKeys({ selectedCollection :selectedOption?.label }, authInfo))
     console.log(' retriveClnKeys 1952:>> ', result);
 
-    setColumnOptions(result.data.data);
-    setFieldTypes(result.data.key_names);
-
-    var clone_lay_mod = [...clone_lay];
-      clone_lay_mod[Number(JSON.parse(sessionStorage.getItem("blockIdx")))] = updating_layObj;
-      await dispatch(updateLayoutInfo(clone_lay_mod));
-
+    if( result ){
+      setColumnOptions(result.data.data);
+      setFieldTypes(result.data.key_names);
+  
+      var clone_lay_mod = [...clone_lay];
+        clone_lay_mod[Number(JSON.parse(sessionStorage.getItem("blockIdx")))] = updating_layObj;
+        await dispatch(updateLayoutInfo(clone_lay_mod));
+  
+    }
+ 
   }
 
 
@@ -3117,16 +3124,10 @@ console.log('props :>> ', props);
                                     getOptionValue={(option) => option.value}
                                     value={selectedCategoryLegend}
                                     onChange={ (e)=>handleCategoryChangeLegend(e)}
+                                    isClearable // 💡 Enables the clear (delete) icon
                                   />
                                   
                                 </div>
-                                {/* <div className="mb-2">
-                                  <label>Example Setting 2</label>
-                                  <select className="form-control">
-                                    <option>Option A</option>
-                                    <option>Option B</option>
-                                  </select>
-                                </div> */}
                               </div>
                             </Collapse>
                           </div>

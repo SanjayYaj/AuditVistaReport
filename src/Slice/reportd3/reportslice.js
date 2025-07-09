@@ -1520,11 +1520,11 @@ export const retreivedataQuery = (combinedQueryFilter, authInfo , uniqueNames) =
                 encrypted_db_url: authInfo.db_info.encrypted_db_url,
                 db_name: authInfo.db_info.db_name,
                 query: combinedQueryFilter,
-                collection_name : nodeInfo.selected_cln_name?.cln_name ,
+                collection_name: nodeInfo.selected_cln_name[0],
                 uniqueNames
             }
             const responseData = await urlSocket.post('report/retreive-query-result', data)
-    
+            console.log('responseData :>> ', responseData);
             await dispatch(setSelectedCollectionData(responseData.data))
             resolve(responseData.data);
         } catch (err) {
@@ -1626,6 +1626,7 @@ export const retrivePageLayout = ( authInfo ,start, end, filterEnabled  , User) 
         
         // const authUser = JSON.parse(sessionStorage.getItem("authUser"));
         const nodeInfo = JSON.parse(sessionStorage.getItem("pageNodeInfo"));
+        console.log('nodeInfo 1629:>> ', nodeInfo);
         const templateInfo = JSON.parse(sessionStorage.getItem("page_data"));
         // console.log('authUser 15781 :>> ', authUser);
        var  authUser={ role:  !User ? 'User' : 'admin'}; 
@@ -1635,7 +1636,7 @@ export const retrivePageLayout = ( authInfo ,start, end, filterEnabled  , User) 
           template_id: templateInfo._id,
           created_by: templateInfo.created_by,
           node_id: nodeInfo.id,
-          collection_name: nodeInfo.selected_cln_name?.cln_name,
+          collection_name: nodeInfo.selected_cln_name[0],
           start, end,
         //   dateFields: Auth?.dateRangeField,
           authUser,

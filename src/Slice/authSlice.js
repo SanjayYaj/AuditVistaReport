@@ -45,9 +45,15 @@ const authSlice = createSlice({
 
 
         // },
-        reportDB :{
-            encrypted_db_url: "U2FsdGVkX19MyFVu68NWJbBkgmUtX9ke+pbsbAnkHBWvSqK0OejfHqSxW2uh8kBERF+pgar1aLIf3WzboJqtRna1xyYG+b0+9LRUxUR8Lc6+Sms/KURy+8p46AYZAVrLogJ89ZzQtpDIfhuQzf4KoS/aR86VDQrew5M6u/M3lzLb43ovrWtqYRdFYVcTGTJ8QTcsqcTe/R/j/782UogQnI+jB5xCoOqWXKjNoHr1YdM=",
-            db_name: 'tvs_6793474f0c005d699cfffdae'
+
+
+
+
+        reportDB: {
+            // encrypted_db_url: "U2FsdGVkX19MyFVu68NWJbBkgmUtX9ke+pbsbAnkHBWvSqK0OejfHqSxW2uh8kBERF+pgar1aLIf3WzboJqtRna1xyYG+b0+9LRUxUR8Lc6+Sms/KURy+8p46AYZAVrLogJ89ZzQtpDIfhuQzf4KoS/aR86VDQrew5M6u/M3lzLb43ovrWtqYRdFYVcTGTJ8QTcsqcTe/R/j/782UogQnI+jB5xCoOqWXKjNoHr1YdM=",
+            // db_name: 'tvs_6793474f0c005d699cfffdae'
+            encrypted_db_url: JSON.parse(sessionStorage.getItem("authUser")) ? JSON.parse(sessionStorage.getItem("authUser"))?.db_info.encrypted_db_url : '',
+            db_name: JSON.parse(sessionStorage.getItem("authUser")) ? JSON.parse(sessionStorage.getItem("authUser"))?.db_info.db_name : ''
         },
         cln_list: [{ "cln_name": "sales_Report_check", "user_friendly_name": "Hotel Surguru" }],
         report_math_operations: [

@@ -46,7 +46,7 @@ const D3Stack_bar_chart = (props) => {
 
   var choosedColors = dataRetreived.ColorMapping 
 
-  console.log('choosedColoras for Stack', choosedColors)
+  // console.log('choosedColoras for Stack', choosedColors)
 
   const chartRef = useRef();
   const [data, setData] = useState(chart_data);
@@ -87,15 +87,28 @@ const D3Stack_bar_chart = (props) => {
 
   const selectedsortredux = useSelector(state => state.reportSliceReducer.selectedsortredux);
   const selectedvalueRedux= useSelector(state => state.reportSliceReducer.selectedValues);
-  console.log('selectedvalueRedux Stack :>> ', selectedvalueRedux);
+  // console.log('selectedvalueRedux Stack :>> ', selectedvalueRedux);
   const AuthSlice = useSelector(state => state.auth);
   const dbInfo = AuthSlice.db_info
 
   
   const {reportDB} = useSelector((state) => state.auth)
+  console.log(' reportSlice.queryFilter stacks :>> ',  reportSlice.queryFilter);
+
+  var queryFilter = reportSlice.queryFilter
+  console.log(' reportSlice.queryFilter :>> ',  reportSlice.queryFilter);
 
   useEffect(() => {
-    console.log("73 Stack chart", dataRetreived, processing);
+    console.log('Stack Updated Query', queryFilter)
+    setProcessing(true)
+    setChartsLoad(false)
+    dispatch(toggleProcessingState(dataRetreived.i))
+    LoadedData(dataRetreived.x_axis_key?.name, '1')
+  }, [queryFilter])
+
+
+  useEffect(() => {
+    // console.log("73 Stack chart", dataRetreived, processing);
 
 
     if (ProcessedID === undefined) {
@@ -120,7 +133,7 @@ const D3Stack_bar_chart = (props) => {
     }
 
     if (ProcessedID) {
-      console.log('121 Already Retyrteived Data ', dataRetreived)
+      // console.log('121 Already Retyrteived Data ', dataRetreived)
       if (dataRetreived?.filtered_data !== undefined) {
         setData(dataRetreived?.filtered_data)
         setChartsLoad(true)
@@ -187,11 +200,48 @@ const D3Stack_bar_chart = (props) => {
     console.log(' Stack value , mode :>> ', dataRetreived , reportSlice.pageNodeInfo?.relationships);
     try {
 
-      const addon =await buildAdditionalFields( dataRetreived.yAxis_arr, dataRetreived.yAxis_Selectd_Cln, dataRetreived.CalculationArr);
+      const addon = await buildAdditionalFields(dataRetreived.yAxis_arr, dataRetreived.yAxis_Selectd_Cln, dataRetreived.CalculationArr);
       console.log('addon :>> ', addon);
 
-      var catg = dataRetreived.legend_category != undefined ? dataRetreived.legend_category.name : ''
-      console.log('catg :>> ', catg);
+    
+
+      // 🏷️ Handle category field if exists
+      let categoryQuery = [];
+      const categoryField = dataRetreived?.legend_category?.name || '';
+      if (categoryField) {
+        categoryQuery.push({
+          field: categoryField,
+          collection: dataRetreived.xaxis_cln.selectedCollection,
+        });
+      }
+      console.log('categoryQuery :>> ', categoryQuery);
+
+
+      let filters = [];
+
+      if (queryFilter) {
+        console.log("queryFilter")
+
+
+        const collectionName = dataRetreived.xaxis_cln.selectedCollection ;
+
+        for (const field in queryFilter) {
+          const checkedValues = queryFilter[field]
+            .filter(item => item.is_checked)
+            .map(item => item.value);
+        
+          if (checkedValues.length > 0) {
+            filters.push({
+              field,
+              value: checkedValues,
+              collection: collectionName
+            });
+          }
+        }
+        
+        console.log("Filteres Mod", filters);
+    }
+    
       if (dataRetreived.selected_cln_name !== undefined) {
         const data = {
           collection_name: dataRetreived.selected_cln_name.cln_name,
@@ -223,9 +273,17 @@ const D3Stack_bar_chart = (props) => {
 
           collections: reportSlice.pageNodeInfo.selected_cln_name,
           // categoryField: dataRetreived.legend_category != undefined ? dataRetreived.legend_category.name : '',
-          categoryField :   [{ field : 'cp_option_selected' , collection : 'cln_adt_pbd_ep_checkpoints' }],
+          // categoryField :   [{ field : 'cp_option_selected' , collection : 'cln_adt_pbd_ep_checkpoints' }],
+         
+         
+          // categoryField :[{ field : 'audit_status_name' , collection : 'cln_adt_pbd_endpoints' }],
+          categoryField : categoryQuery ,
           chartName: dataRetreived.name,
           collections: reportSlice.pageNodeInfo.selected_cln_name ,
+
+
+          filters
+
 
 
         }
@@ -397,12 +455,31 @@ const D3Stack_bar_chart = (props) => {
 
 
   const margin = { top: 70, right: 80, bottom: 80, left: 80 };
-
+  function compressDataPerBar(data, topN = 30) {
+    return data.map(item => {
+      const { name, ...rest } = item;
+      const entries = Object.entries(rest);
+      
+      // Sort keys by descending value
+      const sorted = entries.sort((a, b) => b[1] - a[1]);
+      
+      const top = sorted.slice(0, topN);
+      const others = sorted.slice(topN);
+  
+      const topObj = Object.fromEntries(top);
+      const othersSum = others.reduce((sum, [_, val]) => sum + val, 0);
+  
+      if (othersSum > 0) topObj["Others"] = othersSum;
+  
+      return { name, ...topObj };
+    });
+  }
+  
 
   useEffect(() => {
     var mod_data;
     var chart_id = i;
-    console.log("datakeysdatakeys", datakeys)
+    // console.log("datakeysdatakeys", datakeys)
     if (datakeys !== undefined) {
       const marginTop = margin.top;
       const marginRight = margin.right;
@@ -410,7 +487,7 @@ const D3Stack_bar_chart = (props) => {
       const marginLeft = margin.left;
 
       var sortSlice = reportSlice[chart_id]?.sortedData;
-      console.log('sortSlice :>> ', sortSlice);
+      // console.log('sortSlice :>> ', sortSlice);
       if (sortSlice && sortSlice.length !== 0) {
         mod_data = sortSlice;
       }
@@ -428,12 +505,24 @@ const D3Stack_bar_chart = (props) => {
         mod_data = reportSlice.layoutInfo[props.indexes]?.filtered_data
       }
 
+      // const MAX_BARS = 60;
+      // let truncated_data = mod_data.length > MAX_BARS ? mod_data.slice(0, MAX_BARS) : mod_data;
+      
+      // if (mod_data.length > MAX_BARS) {
+      //   console.warn(`Rendering truncated data: showing only first ${MAX_BARS} of ${mod_data.length} records.`);
+      // }
+      
+      // mod_data = truncated_data
+
+
+
+
 
       //  else {
       //   mod_data = data;
       // }
 
-      console.log('mod_data216 :>> ', mod_data);
+      // console.log('mod_data216 :>> ', mod_data);
 
       // if (mod_data[0][calc] !== undefined) {
       //   mod_data = mod_data[0][calc]
@@ -526,7 +615,7 @@ const D3Stack_bar_chart = (props) => {
 
 
       
-        console.log('containerHeight :>> ', containerHeight);
+        // console.log('containerHeight :>> ', containerHeight);
 
         const x = d3.scaleBand()
           .domain(mod_data.map(d => d.name))  
@@ -537,15 +626,15 @@ const D3Stack_bar_chart = (props) => {
 
           const allSums = mod_data.map(d => d3.sum(datakeys.map(key => d[key])));
 
-console.log("All summed values:", allSums);  // Debug negative values
+// console.log("All summed values:", allSums);  // Debug negative values
 
 // const minValue =d3.min(data, d => d3.min(datakeys, key => +d[key]));
 // const maxValue =d3.max(data, d => d3.max(datakeys, key => d[key]));
 
-console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , datakeys , "maxxxx", d3.max(mod_data, d => d3.sum(datakeys.map(key => d[key]))));
+// console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , datakeys , "maxxxx", d3.max(mod_data, d => d3.sum(datakeys.map(key => d[key]))));
 
       
-          console.log("444444",  d3.max(mod_data, d => d3.sum(datakeys.map(key => d[key]))) ,  d3.min(mod_data, d => d3.sum(datakeys.map(key => +d[key])))  )
+          // console.log("444444",  d3.max(mod_data, d => d3.sum(datakeys.map(key => d[key]))) ,  d3.min(mod_data, d => d3.sum(datakeys.map(key => +d[key])))  )
         const y = d3.scaleLinear()
           .domain([ 0 , d3.max(mod_data, d => d3.sum(datakeys.map(key => d[key])))])
           .nice()
@@ -611,7 +700,7 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
 
 
 
-          console.log('chart_color  553:>> ', chart_color);
+          // console.log('chart_color  553:>> ', chart_color);
           chart_color = d3.quantize(d3.interpolateRainbow, datakeys.length + 2)
       
       
@@ -632,7 +721,7 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
   const colorMappingArray = datakeys.map(key => {
     const chosen = choosedColors?.[key];
     const finalColor = chosen ?? getRandomColor();
-    console.log(`Color for key "${key}":`, chosen ? `(from choosedColors) ${finalColor}` : `(random) ${finalColor}`);
+    // console.log(`Color for key "${key}":`, chosen ? `(from choosedColors) ${finalColor}` : `(random) ${finalColor}`);
     return finalColor;
   });
 
@@ -646,6 +735,17 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
         // Create stack
         const stack = d3.stack()
           .keys(datakeys);
+
+
+
+
+//           const compressedData = compressDataPerBar(mod_data, 3);
+// const keys = Object.keys(compressedData[0]).filter(k => k !== "name");
+// const series = d3.stack().keys(keys)(compressedData);
+
+
+
+
 
         // Stack the data
         const series = stack(mod_data);
@@ -814,7 +914,7 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
             var divX = chartContainerRect.left + window.scrollX;
             var divY = chartContainerRect.top + window.scrollY;
 
-            console.log('mouseover_enabled', mouseover_enabled, mouseovered_type, mouseovered)
+            // console.log('mouseover_enabled', mouseover_enabled, mouseovered_type, mouseovered)
 
             if (mouseovered) {
               if (mouseovered_type) {
@@ -1017,14 +1117,14 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
                 const centerX = width / 2;
                 if (leftPosition + tooltipWidth > centerX) {
                   leftPosition = mouseX - margin.right - margin.left  // Move tooltip 20px left if near center
-                  console.log('leftPosition--->', leftPosition);
+                  // console.log('leftPosition--->', leftPosition);
 
                 }
 
 
 
 
-                console.log('leftPosition + tooltipWidth > containerWidth :>> ', leftPosition + tooltipWidth > containerWidth);
+                // console.log('leftPosition + tooltipWidth > containerWidth :>> ', leftPosition + tooltipWidth > containerWidth);
                 // Adjust tooltip position if it exceeds container bounds
                 // if (leftPosition + tooltipWidth > containerWidth) {
                 //   leftPosition = (fullScreen_enabled ? event.offsetX : event.pageX) - chartContainerRect.left - tooltipWidth + 90;
@@ -1035,7 +1135,7 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
                 if (topPosition < 0) {
                   topPosition = 10; // Ensure tooltip doesn't go off the top of the container
                 }
-                console.log('topPosition :>> ', topPosition, leftPosition, containerWidth, width);
+                // console.log('topPosition :>> ', topPosition, leftPosition, containerWidth, width);
                 // Position the tooltip
                 tooltipNode.style("left", `${leftPosition}px`)
                   .style("top", `${topPosition}px`)
@@ -1867,7 +1967,7 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
 
     var updtData
 
-    console.log('data show_table_fn:>> ', data, Tdata, props.chart_data);
+    // console.log('data show_table_fn:>> ', data, Tdata, props.chart_data);
 
 
 
@@ -1885,7 +1985,7 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
     if (updtData !== undefined && updtData.length > 0) {
       // Group the data if it is Not in Combined
       // var updtData = data[0][calc]
-      console.log('updtData :>> ', updtData);
+      // console.log('updtData :>> ', updtData);
       // const fieldNames = Object.keys(updtData[0]).filter(key => key !== "_id");
 
       const fieldNames = Array.from(
@@ -1918,7 +2018,7 @@ console.log('minValue', 'maxValue' , "::::::::::::::::::::____" , mod_data  , da
     }
 
 
-    console.log('data_exist Stacks :>> ', data_exist);
+    // console.log('data_exist Stacks :>> ', data_exist);
     var tableContainer = document.getElementById(`tableContainer${i}`);
 
     if (tableContainer !== null) {

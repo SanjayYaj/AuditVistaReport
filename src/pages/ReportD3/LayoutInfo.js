@@ -2894,7 +2894,8 @@ const LayoutInfo = () => {
     const getXaxisValue = async () => {
         const pageNodeInfo = JSON.parse(sessionStorage.getItem("pageNodeInfo"))
         setFilterLoading(true)
-        var response = await dispatch(retriveClnKeys(pageNodeInfo.selected_cln_name, authInfo));
+        console.log('pageNodeInfo  2897:>> ', pageNodeInfo);
+        var response = await dispatch(retriveClnKeys({ selectedCollection: pageNodeInfo.selected_cln_name[0] }, authInfo));
         if (response.status === 200) {
             if (response.data.data.length > 0) {
                 await dispatch(setXaxisFilterValue(response.data.data))
@@ -3289,6 +3290,9 @@ const LayoutInfo = () => {
 
                                                                     </div>
 
+{
+    console.log('updatedSliceData :>> ', updatedSliceData)
+}
                                                                     <div className="d-flex flex-column gap-2 pt-1">
                                                                         <div className="d-flex justify-content-evenly flex-wrap gap-1" style={{}}>
                                                                             {filterLoading ? (
@@ -3386,6 +3390,9 @@ const LayoutInfo = () => {
 
                                                                         </div>
                                                                     </div> */}
+                                                                    {
+                                                                        console.log('sliceCards :>> ', sliceCards)
+                                                                    }
                                                                                 {
                                                                                     sliceCards?.map((data, indexes) => {
                                                                                         return (
